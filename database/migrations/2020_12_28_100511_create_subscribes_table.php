@@ -15,6 +15,17 @@ class CreateSubscribesTable extends Migration
     {
         Schema::create('subscribes', function (Blueprint $table) {
             $table->id();
+
+
+            $table->foreignId('user_id')
+                ->constrained()
+                ->onDelete('CASCADE');
+
+            $table->foreignId('thread_id')
+                ->constrained()
+                ->onDelete('CASCADE');
+
+                
             $table->timestamps();
         });
     }

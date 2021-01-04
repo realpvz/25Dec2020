@@ -15,6 +15,23 @@ class CreateThreadsTable extends Migration
     {
         Schema::create('threads', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('slug');
+            $table->text('content');
+            $table->boolean('flag')->default(1);
+
+            /* relation */
+            
+            $table->foreignId('user_id')
+                ->constrained()
+                ->onDelete('CASCADE');
+            
+            $table->foreignId('channel_id')
+                ->constrained()
+                ->onDelete('CASCADE');
+            
+            $table->unsignedBigInteger('best_answer_id');
+            
             $table->timestamps();
         });
     }
