@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -20,9 +22,10 @@ class AuthControllerTest extends TestCase
 
     public function test_new_user_can_register()
     {
+        $this->registerRolesAndPermissions();
         $response = $this->postJson(route('auth.register'), [
             'name' => "ImanPvZ",
-            'email' => "Imanpvz@yahoo.com",
+            'email' => "ipvz@yahoo.com",
             'password' => "123456789",
         ]);
 
@@ -57,5 +60,26 @@ class AuthControllerTest extends TestCase
         $response = $this->actingAs($user)->postJson(route('auth.logout'));
     
         $response->assertStatus(Response::HTTP_OK);
+    }
+
+    public function registerRolesAndPermissions()
+    {
+        $roleInDatabase = Role::where('name', config('permission.default_roles')[0]);
+        if ($roleInDatabase->count() < 1){
+            foreach (config('permission.default_roles') as $role) {
+                Role::create([
+                    'name' => $role,
+                ]);
+            }
+        }
+
+        $permissionInDatabase = Permission::where('name', config('permission.default_permissions')[0]);
+        if ($permissionInDatabase->count() < 1){
+            foreach(config('permission.default_permissions') as $permission) {
+                Permission::create([
+                    'name' => $permission,
+                ]);
+            }
+        }
     }
 }
