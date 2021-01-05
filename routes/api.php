@@ -18,9 +18,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function(){
     /* auth */
-    include __DIR__ . '\v1\auth_routes.php';
+    include __DIR__ . '/v1/auth_routes.php';
 
     /* channels */
-    include __DIR__ . '\v1\channels_routes.php';
+    include __DIR__ . '/v1/channels_routes.php';
+
+    /* threads */
+    include __DIR__ . '/v1/threads_routes.php';
     
 });
