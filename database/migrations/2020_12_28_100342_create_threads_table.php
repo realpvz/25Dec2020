@@ -30,7 +30,8 @@ class CreateThreadsTable extends Migration
                 ->constrained()
                 ->onDelete('CASCADE');
             
-            $table->unsignedBigInteger('best_answer_id');
+            $table->unsignedBigInteger('best_answer_id')->nullable();
+
             
             $table->timestamps();
         });

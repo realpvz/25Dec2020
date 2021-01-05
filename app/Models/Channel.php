@@ -10,6 +10,11 @@ class Channel extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'slug'
+    ];
+
 
     public function threads()
     {

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AuthControllerTest extends TestCase
@@ -25,7 +26,7 @@ class AuthControllerTest extends TestCase
             'password' => "123456789",
         ]);
 
-        $response->assertStatus(201);
+        $response->assertStatus(Response::HTTP_CREATED);
     }
 
     public function test_user_can_login()
@@ -37,7 +38,7 @@ class AuthControllerTest extends TestCase
             'password' => "password",
         ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     public function test_show_user_info_if_logged_in()
@@ -46,7 +47,7 @@ class AuthControllerTest extends TestCase
         
         $response = $this->actingAs($user)->get(route('auth.user'));
         
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
     }
 
     public function test_logged_in_user_can_logout()
@@ -55,6 +56,6 @@ class AuthControllerTest extends TestCase
     
         $response = $this->actingAs($user)->postJson(route('auth.logout'));
     
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_OK);
     }
 }
