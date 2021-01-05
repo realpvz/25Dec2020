@@ -29,4 +29,21 @@ class ThreadController extends Controller
     }
 
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+            'channel_id' => 'required'
+        ]);
+
+        resolve(ThreadRepository::class)->store($request);
+
+        return response()->json([
+            'message' => 'thread created successfully',
+        ], Response::HTTP_CREATED);
+    }
+
+
+
 }
