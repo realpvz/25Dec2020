@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Permission;
 use Illuminate\Foundation\Testing\WithFaker;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 
 class ChannelControllerTest extends TestCase
 {
@@ -49,9 +50,11 @@ class ChannelControllerTest extends TestCase
 
         $user = User::factory()->create();
 
+        Sanctum::actingAs($user);
+        
         $user->givePermissionTo('channel management');
 
-        $response = $this->actingAs($user)->postJson(route('channel.create'), []);
+        $response = $this->postJson(route('channel.create'), []);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
     }
@@ -63,9 +66,11 @@ class ChannelControllerTest extends TestCase
 
         $user = User::factory()->create();
 
+        Sanctum::actingAs($user);
+        
         $user->givePermissionTo('channel management');
 
-        $response = $this->actingAs($user)->postJson(route('channel.create'),[
+        $response = $this->postJson(route('channel.create'),[
            'name' => 'Laravel', 
         ]);
 
@@ -80,12 +85,14 @@ class ChannelControllerTest extends TestCase
 
         $user = User::factory()->create();
 
+        Sanctum::actingAs($user);
+        
         $user->givePermissionTo('channel management');
 
         $channel = Channel::factory()->create([
             'name' => 'Laravel',
         ]);
-        $response = $this->actingAs($user)->json('PUT',route('channel.update'),[
+        $response = $this->json('PUT',route('channel.update'),[
             'id' => $channel->id,
             'name' => 'Vuejs', 
         ]);
@@ -104,11 +111,13 @@ class ChannelControllerTest extends TestCase
 
         $user = User::factory()->create();
 
+        Sanctum::actingAs($user);
+        
         $user->givePermissionTo('channel management');
 
         $channel = Channel::factory()->create();
 
-        $response = $this->actingAs($user)->json('DELETE', route('channel.delete'), [
+        $response = $this->json('DELETE', route('channel.delete'), [
             'id' => $channel->id,
         ]);
 
