@@ -3,7 +3,7 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
+use App\Models\Answer;
 use App\Models\Thread;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -11,29 +11,20 @@ use Illuminate\Http\Request;
 
 
 
-class ThreadRepository {
+class AnswerRepository {
 
     
-    public function getAllAvailableThreads()
+    public function getAllAnswers()
     {
-        return Thread::whereFlag(1)->latest()->get();
+        return Answer::query()->latest()->get();
     }
 
 
-    public function getThreadBySlug($slug)
+    public function store(Request $request)
     {
-        return Thread::whereSlug($slug)->whereFlag(1)->first();
-    }
-
-
-    public function store(Request $request): void
-    {
-        Thread::create([
-            'title' => $request->input('title'),
-            'slug' => Str::slug($request->input('slug')),
+        Thread::find($request->thread_id)->answers()->create([
             'content' => $request->input('content'),
-            'channel_id' => $request->input('channel_id'),
-            'user_id' => auth()->user()->id
+            'user_id' => auth()->id(),
         ]);
     }
 
