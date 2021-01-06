@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Hash;
 
 class UserRepository {
 
+    public function find($id)
+    {
+        return User::find($id);
+    }
     
     public function create(Request $request): User
     {

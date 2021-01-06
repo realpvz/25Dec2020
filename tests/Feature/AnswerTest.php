@@ -13,6 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AnswerTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * A basic feature test example.
      *
@@ -70,33 +71,39 @@ class AnswerTest extends TestCase
 
     public function test_can_update_own_answer_for_thread()
     {
-        Sanctum::actingAs(User::factory()->create());
+        $user = User::factory()->create();
         
-        $thread = Thread::factory()->create();
+        Sanctum::actingAs($user);
         
         $answer = Answer::factory()->create([
-            'content' => 'Foo'
+            'content' => 'Foo',
+            'user_id' => $user->id,
         ]);
         
         $response = $this->putJson(route('answers.update', [$answer]), [
             'content' => 'Bar',
         ]);
         
-        $answer->refresh();
-
+        
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJson([
             'message' => 'answer updated successfully'
-        ]);
+            ]);
+
+        $answer->refresh();
         $this->assertEquals('Bar', $answer->content);
     }
 
 
     public function test_can_delete_own_answer()
     {
-        Sanctum::actingAs(User::factory()->create());
+        $user = User::factory()->create();
+
+        Sanctum::actingAs($user);
         
-        $answer = Answer::factory()->create();
+        $answer = Answer::factory()->create([
+            'user_id' => $user->id,
+        ]);
 
         $response = $this->delete(route('answers.destroy',[$answer]));
 
