@@ -29,29 +29,16 @@ class AnswerRepository {
     }
 
 
-    public function update(Thread $thread, Request $request): void
+    public function update(Request $request,Answer $answer): void
     {
-        if (!$request->has('best_answer_id')){
-
-            $thread->update([
-                'title' => $request->input('title'),
-                'slug' => Str::slug($request->input('slug')),
-                'content' => $request->input('content'),
-                'channel_id' => $request->input('channel_id'),
-            ]);
-            
-        } else {
-
-            $thread->update([
-                'best_answer_id' => $request->input('best_answer_id'),
-            ]);
-
-        }
+        $answer->update([
+            'content' => $request->input('content'),
+        ]);
     }
 
-    public function destroy(Thread $thread)
+    public function destroy(Answer $answer)
     {
-        $thread->delete();
+        $answer->delete();
     }
-    
+
 }
