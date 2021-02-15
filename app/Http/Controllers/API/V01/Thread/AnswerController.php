@@ -18,6 +18,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AnswerController extends Controller
 {
+
+
+    public function __construct()
+    {
+        $this->middleware('user-block')->except([
+            'index',
+        ]);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -47,6 +56,11 @@ class AnswerController extends Controller
         
         // Send NewReplySubmitted Notification To Subscribed Users
         Notification::send($notifiable_users, new NewReplySubmitted(Thread::find($request->thread_id)));
+
+        if (Thread::find($request->input('thread_id'))->user_id !== auth()->id()) {
+            auth()->user()->increment('score', 10);
+        }
+        
         
         return response()->json([
             'message' => 'answers created successfully',

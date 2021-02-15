@@ -13,6 +13,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->only('user');
+    }
+    
     public function register(Request $request)
     {
         /* Validate Form Input  */
@@ -57,7 +63,12 @@ class AuthController extends Controller
 
     public function user()
     {
-        return response()->json(Auth::user(), Response::HTTP_OK);
+        $data = [
+            Auth::user(),
+            'notifications' => Auth::user()->unreadNotifications(),
+            'message' => 'successful'
+        ];
+        return response()->json($data, Response::HTTP_OK);
     }
 
 

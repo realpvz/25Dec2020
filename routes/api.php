@@ -20,6 +20,9 @@ Route::prefix('v1')->group(function(){
     /* auth */
     include __DIR__ . '/v1/auth_routes.php';
 
+    /* user */
+    include __DIR__ . '/v1/user_routes.php';
+
     /* channels */
     include __DIR__ . '/v1/channels_routes.php';
 
